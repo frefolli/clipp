@@ -2,6 +2,7 @@
 #define RF_CLIPP_MENU
 #include <rf/clipp/arg.hh>
 #include <rf/clipp/flag.hh>
+#include <rf/clipp/hypermap.hh>
 #include <vector>
 namespace rf::clipp {
     class Menu {
@@ -19,6 +20,9 @@ namespace rf::clipp {
             std::string getUsage();
             std::string getHelp();
             std::string getName();
+
+            HyperMap* process(int argc, char** args,
+                              HyperMap* config = nullptr);
     };
 }
 #endif

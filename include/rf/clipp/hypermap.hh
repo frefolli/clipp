@@ -22,6 +22,8 @@ namespace rf::clipp {
             T& get(std::string name) {
                 return *((T*) gets(name));
             }
+
+            std::string toString();
     };
 }
 #endif

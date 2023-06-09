@@ -73,3 +73,14 @@ std::string Menu::getHelp() {
 std::string Menu::getName() {
     return name;
 }
+
+HyperMap* Menu::process(int argc, char** args,
+                        HyperMap* config) {
+    if (config == nullptr) {
+        config = new HyperMap();
+    }
+    // ---- TODO ----
+    config->set("check", new std::string("OK"));
+    // ---- TODO ----
+    return config;
+}
