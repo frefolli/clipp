@@ -1,13 +1,14 @@
 #include <rf/clipp/menu.hh>
 #include <rf/clipp/flag.hh>
 #include <rf/clipp/arg.hh>
+#include <rf/clipp/hypermap.hh>
+#include <rf/clipp/hyperint.hh>
+#include <rf/clipp/hyperbool.hh>
+#include <rf/clipp/hyperstring.hh>
 #include <iostream>
 #include <stdexcept>
 
-typedef rf::clipp::Menu Menu;
-typedef rf::clipp::Flag Flag;
-typedef rf::clipp::Arg Arg;
-typedef rf::clipp::HyperMap HyperMap;
+using namespace rf::clipp;
 
 int ACTUAL_ARGC = 0;
 char** ACTUAL_ARGS = nullptr;
@@ -19,7 +20,7 @@ void InitArgs(int argc, char** args) {
 }
 
 Menu* InitMenu() {
-    return new Menu { std::string(FILE_NAME, {
+    return new Menu { std::string(FILE_NAME), {
             new Menu("info", {}, { new Flag("verbose") }),
             new Menu("pull", {}, { new Flag("verbose") }),
             new Menu("push", {}, { new Flag("verbose") }),
@@ -37,22 +38,22 @@ Menu* InitMenu() {
 HyperMap* ParseArgs(Menu* menu) {
     HyperMap* config = new HyperMap {{
         {"screen", new HyperMap {{
-            {"width", new int(600)},
-            {"height", new int(400)}
+            {"width", new HyperInt(600)},
+            {"height", new HyperInt(400)}
         }}},
         {"xterm", new HyperMap {{
-            {"width", new int(80)},
-            {"height", new int(60)}
+            {"width", new HyperInt(80)},
+            {"height", new HyperInt(60)}
         }}},
-        {"check", new std::string("FAIL")}
+        {"check", new HyperString("FAIL")}
     }};
-    return menu->parseArgs(ACTUAL_ARGC,
-                           ACTUAL_ARGS,
-                           config);
+    return menu->process(ACTUAL_ARGC,
+                         ACTUAL_ARGS,
+                         config);
 }
 
 void PrintUsage(Menu* menu) {
-    std::cout << MENU->getUsage() << std::endl;
+    std::cout << menu->getUsage() << std::endl;
 }
 
 void PrintConfig(HyperMap* config) {

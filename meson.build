@@ -7,6 +7,10 @@ include_dir = include_directories('include')
 clipp = library(
   'clipp', [
     'src/hypermap.cc',
+    'src/hyperint.cc',
+    'src/hyperbool.cc',
+    'src/hyperstring.cc',
+    'src/hyperobject.cc',
     'src/flag.cc',
     'src/arg.cc',
     'src/menu.cc'

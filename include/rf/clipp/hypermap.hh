@@ -1,22 +1,18 @@
 #ifndef RF_CLIPP_HYPERMAP
 #define RF_CLIPP_HYPERMAP
+#include <rf/clipp/hyperobject.hh>
 #include <string>
 #include <map>
 namespace rf::clipp {
-    class HyperMap {
+    class HyperMap : public HyperObject {
         private:
-            std::map<std::string, void*> data;
+            std::map<std::string, HyperObject*> data;
         public:
-            HyperMap(std::map<std::string, void*> data = {});
+            HyperMap(std::map<std::string, HyperObject*> data = {});
             ~HyperMap();
 
-            void* gets(std::string name);
-            void sets(std::string name, void* ptr);
-            
-            template<class T>
-            void set(std::string name, T* ptr) {
-                sets(name, (void*) ptr);
-            }
+            HyperObject* gets(std::string name);
+            void sets(std::string name, HyperObject* ptr);
 
             template<class T>
             T& get(std::string name) {
@@ -24,6 +20,7 @@ namespace rf::clipp {
             }
 
             std::string toString();
+            void* asPtr();
     };
 }
 #endif

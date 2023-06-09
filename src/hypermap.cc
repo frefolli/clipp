@@ -1,15 +1,16 @@
 #include <rf/clipp/hypermap.hh>
 #include <stdexcept>
+#include <regex>
 //  class Hypermap
-//      std::map<std::string, void*> data
-
+//      std::map<std::string, HyperObject*> data
 using namespace rf::clipp;
 
-HyperMap::HyperMap(std::map<std::string, void*> data) {
-    for (auto it = data.begin(); it != data.end(); ++it)
+HyperMap::HyperMap(std::map<std::string, HyperObject*> data) {
+    for (auto it = data.begin(); it != data.end(); ++it) {
         if (it->second == nullptr)
             throw std::runtime_error("NullPointerException");
-    data = data;
+    }
+    this->data = data;
 }
 
 HyperMap::~HyperMap() {
@@ -18,56 +19,40 @@ HyperMap::~HyperMap() {
             delete it->second;
 }
 
-void* HyperMap::gets(std::string name) {
+HyperObject* HyperMap::gets(std::string name) {
     auto it = data.find(name);
     if (it == data.end())
         return nullptr;
     return it->second;
 }
 
-void HyperMap::sets(std::string name, void* ptr) {
+void HyperMap::sets(std::string name, HyperObject* ptr) {
     if (ptr == nullptr)
         throw std::runtime_error("NullPointerException");
     auto it = data.find(name);
     if (it != data.end())
-        delete it->second;
+        delete data[name];
     data[name] = ptr;
 }
 
 std::string indentString(std::string str) {
-    for (auto it = str.begin(); it != str.end(); ++it) {
-        if (*it == '\n') {
-            str.replace(it, it+1, "\n\t");
-        }
-    }
-    return "\n" + str;
-}
-
-std::string toString(void* ptr) {
-    std::string objStr = "undefined";
-    if (std::string* obj = dynamic_cast<std::string*>(ptr);
-            obj != nullptr) {
-        objStr = *obj;
-    } else if (HyperMap* obj = dynamic_cast<HyperMap*>(ptr);
-            obj != nullptr) {
-        objStr = obj->toString();
-    } else if (bool* obj = dynamic_cast<bool*>(ptr);
-            obj != nullptr) {
-        objStr = (*obj) ? "true" : "false";
-    } else if (int* obj = dynamic_cast<int*>(ptr);
-            obj != nullptr) {
-        objStr = std::to_string(*obj);
-    }
-    return objStr;
+    return std::regex_replace(str, std::regex("\\n"), "\n\t");
 }
 
 std::string HyperMap::toString() {
     if (data.size() == 0)
         return "{}";
     std::string rep = "{";
-    for (auto it = data.begin(); it != data.end(); ++it) {
-        rep += "\n" + indentString("\"" + it->first + "\": " +
-                                   toString(it->second));
+    for (auto it = data.begin(); it != data.end();) {
+        rep += indentString("\n\"" + it->first + "\": " +
+                            it->second->toString());
+        ++it;
+        if (it != data.end())
+            rep += ",";
     }
     return rep + "\n}";
 }
+
+void* HyperMap::asPtr() {
+    return nullptr;
+};

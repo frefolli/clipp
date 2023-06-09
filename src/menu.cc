@@ -1,4 +1,5 @@
 #include <rf/clipp/menu.hh>
+#include <rf/clipp/hyperstring.hh>
 #include <stdexcept>
 //  class Menu
 //      std::string name
@@ -80,7 +81,7 @@ HyperMap* Menu::process(int argc, char** args,
         config = new HyperMap();
     }
     // ---- TODO ----
-    config->set("check", new std::string("OK"));
+    config->sets("check", new HyperString("OK"));
     // ---- TODO ----
     return config;
 }
