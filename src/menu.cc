@@ -41,15 +41,28 @@ Menu::~Menu() {
 
 std::string Menu::getUsage() {
     std::string rep = name;
+    
+    if (subMenus.size() > 0)
+        rep += " [";
     for (auto it = subMenus.begin(); it != subMenus.end(); ++it)
-        if (*it != nullptr)
-            rep += " [" + it->getUsage() + "]";
+        if (*it != nullptr) {
+            if (it == subMenus.begin()) {
+                rep += "[" + (*it)->getUsage() + "]";
+            } else {
+                rep += " | [" + (*it)->getUsage() + "]";
+            }
+        }
+    if (subMenus.size() > 0)
+        rep += "]";
+
     for (auto it = flags.begin(); it != flags.end(); ++it)
         if (*it != nullptr)
-            rep += " " + it->getUsage();
+            rep += " " + (*it)->getUsage();
+    
     for (auto it = args.begin(); it != args.end(); ++it)
         if (*it != nullptr)
-            rep += " " + it->getUsage();
+            rep += " " + (*it)->getUsage();
+    
     return rep;
 }
 

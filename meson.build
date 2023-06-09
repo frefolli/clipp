@@ -17,6 +17,6 @@ main = executable(
   'main', [
     'src/main.cc',
   ], install : false,
-  dependency: clipp,
+  link_with: clipp,
   include_directories: include_dir)
 

@@ -5,7 +5,7 @@
 
 using namespace rf::clipp;
 
-HyperMap::HyperMap(std::map<std::string, void*> data = {}) {
+HyperMap::HyperMap(std::map<std::string, void*> data) {
     for (auto it = data.begin(); it != data.end(); ++it)
         if (it->second == nullptr)
             throw std::runtime_error("NullPointerException");

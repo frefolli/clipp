@@ -13,6 +13,7 @@ bool isLongName(std::string longName) {
     if (longName.substr(0, 2) != "--")
         return false;
     for (auto it = longName.begin()+2; it != longName.end(); ++it) {
+        char c = *it;
         if (! ((c == '-') ||
                ((c >= '0' ) && (c <= '9')) ||
                ((c >= 'A' ) && (c <= 'Z')) ||
@@ -83,8 +84,5 @@ std::string Flag::getHelp() {
 }
 
 std::string Flag::getUsage() {
-    std::string opt = shortName + "|" + longName;
-    if (optional)
-        return "[" + opt + "]";
-    return opt;
+    return "[" + shortName + "]";
 }
