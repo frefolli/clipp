@@ -1,5 +1,7 @@
 #include <rf/clipp/utils.hh>
 #include <regex>
+#include <stdexcept>
+
 std::string rf::clipp::indentString(std::string str) {
     return std::regex_replace(str, std::regex("\\n"), "\n\t");
 }
@@ -40,4 +42,42 @@ std::string rf::clipp::encodeLongName(std::string longName) {
             *it = '-';
     }
     return longName;
+}
+
+std::string rf::clipp::toString(rf::clipp::Type type) {
+    if (type == Void)
+        return "void";
+    if (type == String)
+        return "string";
+    if (type == Bool)
+        return "bool";
+    if (type == Int)
+        return "int";
+    return "undefined";
+}
+
+rf::clipp::HyperBool* rf::clipp::parseBool(std::string text) {
+    if (std::regex_match(text, std::regex("[Tt][Rr][Uu][Ee]")))
+        return new rf::clipp::HyperBool(true);
+    if (std::regex_match(text, std::regex("[Ff][Aa][Ll][Ss][Ee]")))
+        return new rf::clipp::HyperBool(false);
+    return nullptr;
+}
+
+rf::clipp::HyperInt* rf::clipp::parseInt(std::string text) {
+    if (std::regex_match(text, std::regex("[0-9]+")))
+        return new rf::clipp::HyperInt(std::stoi(text));
+    return nullptr;
+}
+
+rf::clipp::HyperObject* rf::clipp::parseObject(std::string text,
+                                               rf::clipp::Type type) {
+    if (type == String) {
+        return new rf::clipp::HyperString(text);
+    } else if (type == Bool) {
+        return new rf::clip::parseBool(text);
+    } else if (type == Int) {
+        return new rf::clip::parseInt(text);
+    }
+    throw std::runtime_error("InvalidTypeException");
 }

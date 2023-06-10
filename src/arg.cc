@@ -10,10 +10,12 @@ using namespace rf::clipp;
 
 Arg::Arg(std::string name,
          bool optional,
-         std::string help) {
+         std::string help,
+         Type type) {
     this->name = name;
     this->optional = optional;
     this->help = help;
+    this->type = type;
 }
 
 Arg::~Arg() {
@@ -41,13 +43,29 @@ bool Arg::isOptional() {
 bool Arg::process(int argc, char** args, int& index, HyperMap*& root) {
     if (index >= argc)
         return false;
-    // ---- TODO ----
+    
     if (root == nullptr)
         throw std::runtime_error("NullPointerException");
+    
     if (root->has(name))
         return false;
-    root->sets(name, new HyperString(args[index]));
-    ++index;
-    // ---- TODO ----
+
+    if (index >= args) {
+        throw std::runtime_error("flag " + name +
+                                 ", expected argument of type" +
+                                 toString(type));
+    }
+    if (HyperObject* obj = parseObject(args[index], type);
+        obj != nullptr) {
+        root->sets(name, obj);
+        ++index;
+    } else {
+        // TODO: support default value
+        throw std::runtime_error("flag " + name +
+                                 ", expected argument of type" +
+                                 toString(type) + ", got \"" +
+                                 args[index] + "\"");
+    }
+    
     return true;
 }

@@ -13,7 +13,8 @@ using namespace rf::clipp;
 Flag::Flag(std::string name,
      std::string longName,
      std::string shortName,
-     std::string help) {
+     std::string help,
+     Type type) {
     if (longName.size() == 0)
         this->longName  = "--" + encodeLongName(name);
     else if (! isLongName(longName))
@@ -26,6 +27,7 @@ Flag::Flag(std::string name,
     
     this->help = help;
     this->name = name;
+    this->type = type;
 }
 
 Flag::~Flag() {
@@ -59,10 +61,29 @@ bool Flag::process(int argc, char** args, int& index, HyperMap*& root) {
         (std::strcmp(longName.c_str(), args[index]) != 0)) {
         return false;
     }; ++index;
-    // ---- TODO ----
     if (root == nullptr)
         throw std::runtime_error("NullPointerException");
-    root->sets(name, new HyperBool(true));
-    // ---- TODO ----
+   
+    if (type == Void) {
+        root->sets(name, new HyperBool(true));
+    } else {
+        if (index >= args) {
+            throw std::runtime_error("flag " + name +
+                                     ", expected argument of type" +
+                                     toString(type));
+        }
+        if (HyperObject* obj = parseObject(args[index], type);
+            obj != nullptr) {
+            root->sets(name, obj);
+            ++index;
+        } else {
+            // TODO: support default value
+            throw std::runtime_error("flag " + name +
+                                     ", expected argument of type" +
+                                     toString(type) + ", got \"" +
+                                     args[index] + "\"");
+        }
+    }
+
     return true;
 }

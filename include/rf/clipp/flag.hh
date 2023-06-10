@@ -9,11 +9,13 @@ namespace rf::clipp {
             std::string longName;
             std::string shortName;
             std::string help;
+            Type type = VOID;
         public:
             Flag(std::string name,
                  std::string longName = "",
                  std::string shortName = "",
-                 std::string help = "");
+                 std::string help = "",
+                 Type type = VOID);
             ~Flag();
 
             std::string getName();
