@@ -15,8 +15,21 @@ clipp = library(
     'src/flag.cc',
     'src/arg.cc',
     'src/menu.cc'
-  ], install: false, 
+  ], install: true, 
   include_directories: include_dir)
+
+install_headers([
+  'include/rf/clipp/arg.hh',
+  'include/rf/clipp/hyperbool.hh',
+  'include/rf/clipp/hypermap.hh',
+  'include/rf/clipp/hyperstring.hh',
+  'include/rf/clipp/type.hh',
+  'include/rf/clipp/flag.hh',
+  'include/rf/clipp/hyperint.hh',
+  'include/rf/clipp/hyperobject.hh',
+  'include/rf/clipp/menu.hh',
+  'include/rf/clipp/utils.hh'
+  ], subdir: 'rf/clipp')
 
 main = executable(
   'main', [
