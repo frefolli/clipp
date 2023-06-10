@@ -6,6 +6,7 @@ include_dir = include_directories('include')
 
 clipp = library(
   'clipp', [
+    'src/utils.cc',
     'src/hypermap.cc',
     'src/hyperint.cc',
     'src/hyperbool.cc',

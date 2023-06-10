@@ -1,6 +1,8 @@
 #include <rf/clipp/menu.hh>
 #include <rf/clipp/hyperstring.hh>
+#include <cstring>
 #include <stdexcept>
+#include <iostream>
 //  class Menu
 //      std::string name
 //      std::vector<Menu*> subMenus
@@ -75,17 +77,52 @@ std::string Menu::getName() {
     return name;
 }
 
-HyperMap* Menu::process(int argc, char** args, int& index, HyperMap* root) {
+bool Menu::process(int argc, char** args, int& index, HyperMap*& root) {
+    if (index >= argc)
+        throw std::runtime_error("InvalidIndexException");
+    
+    if (std::strcmp(name.c_str(), args[index]) != 0) {
+        return false;
+    }; ++index;
     HyperMap* config = new HyperMap();
-    // ---- TODO ----
-    // ---- TODO ----
-    if (root == nullptr)
-        return config;
-    root->set(name, config);
-    return root;
+
+    while (index < argc) {
+        bool foundSomething = false;
+        // SUB MENUS
+        for (auto it = subMenus.begin(); it != subMenus.end(); ++it) {
+            foundSomething |= (*it)->process(argc, args, index, config);
+            if (foundSomething) break;
+        }; if (foundSomething) continue;
+
+        // FLAGS
+        for (auto it = flags.begin(); it != flags.end(); ++it) {
+            foundSomething |= (*it)->process(argc, args, index, config);
+            if (foundSomething) break;
+        }; if (foundSomething) continue;
+
+        // 
+        for (auto it = this->args.begin(); it != this->args.end(); ++it) {
+            foundSomething |= (*it)->process(argc, args, index, config);
+            if (foundSomething) break;
+        }; if (foundSomething) continue;
+
+        if (!foundSomething)
+            break;
+    }
+
+    if (root == nullptr) {
+        root = config;
+    } else {
+        root->sets(name, config);
+    }
+    return true;
 }
 
 HyperMap* Menu::process(int argc, char** args) {
     int index = 0;
-    return process(argc, args, index, nullptr);
+    if (index >= argc)
+        return new HyperMap();
+    HyperMap* root = nullptr;
+    process(argc, args, index, root);
+    return root;
 }

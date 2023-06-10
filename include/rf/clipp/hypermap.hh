@@ -13,6 +13,7 @@ namespace rf::clipp {
 
             HyperObject* gets(std::string name);
             void sets(std::string name, HyperObject* ptr);
+            bool has(std::string name);
 
             template<class T>
             T& get(std::string name) {

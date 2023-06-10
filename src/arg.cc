@@ -1,4 +1,6 @@
 #include <rf/clipp/arg.hh>
+#include <stdexcept>
+#include <rf/clipp/hyperstring.hh>
 //  class Arg
 //      std::string name
 //      bool optional
@@ -36,12 +38,16 @@ bool Arg::isOptional() {
     return optional;
 }
 
-HyperMap* Arg::process(int argc, char** args, int& index, HyperMap* root) {
-    HyperMap* config = new HyperMap();
-    // ---- TODO ----
+bool Arg::process(int argc, char** args, int& index, HyperMap*& root) {
+    if (index >= argc)
+        return false;
     // ---- TODO ----
     if (root == nullptr)
-        return config;
-    root->set(name, config);
-    return root;
+        throw std::runtime_error("NullPointerException");
+    if (root->has(name))
+        return false;
+    root->sets(name, new HyperString(args[index]));
+    ++index;
+    // ---- TODO ----
+    return true;
 }

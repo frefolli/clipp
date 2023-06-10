@@ -1,6 +1,7 @@
 #ifndef RF_CLIPP_ARG
 #define RF_CLIPP_ARG
 #include <string>
+#include <rf/clipp/hypermap.hh>
 namespace rf::clipp {
     class Arg {
         private:
@@ -17,8 +18,8 @@ namespace rf::clipp {
             std::string getHelp();
             std::string getUsage();
             bool isOptional();
-            HyperMap* process(int argc, char** args,
-                              int& index, HyperMap* root);
+            bool process(int argc, char** args,
+                         int& index, HyperMap*& root);
     };
 }
 #endif

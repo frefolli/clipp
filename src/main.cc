@@ -15,8 +15,8 @@ char** ACTUAL_ARGS = nullptr;
 char* FILE_NAME = nullptr;
 void InitArgs(int argc, char** args) {
     FILE_NAME = args[0];
-    ACTUAL_ARGC = argc+1;
-    ACTUAL_ARGS = args-1;
+    ACTUAL_ARGC = argc;
+    ACTUAL_ARGS = args;
 }
 
 Menu* InitMenu() {
@@ -26,7 +26,7 @@ Menu* InitMenu() {
             new Menu("push", {}, { new Flag("verbose") }),
         }, {
             new Flag("input"),
-            new Flag("output file"),
+            new Flag("output"),
             new Flag("format")
         }, {
             new Arg("width", false),

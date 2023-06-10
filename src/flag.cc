@@ -1,49 +1,14 @@
 #include <rf/clipp/flag.hh>
 #include <stdexcept>
+#include <rf/clipp/hyperbool.hh>
+#include <cstring>
+#include <rf/clipp/utils.hh>
 //  class Flag
 //      std::string name
 //      std::string longName
 //      std::string shortName
 //      std::string help
 using namespace rf::clipp;
-
-bool isLongName(std::string longName) {
-    if (longName.size() <= 2)
-        return false;
-    if (longName.substr(0, 2) != "--")
-        return false;
-    for (auto it = longName.begin()+2; it != longName.end(); ++it) {
-        char c = *it;
-        if (! ((c == '-') ||
-               ((c >= '0' ) && (c <= '9')) ||
-               ((c >= 'A' ) && (c <= 'Z')) ||
-               ((c >= 'a' ) && (c <= 'z'))))
-            return false;
-    }
-    return true;
-}
-
-bool isShortName(std::string shortName) {
-    if (shortName.size() != 2)
-        return false;
-    if (shortName[0] != '-')
-        return false;
-    char c = shortName[1];
-    if (! ((c == '-') ||
-           ((c >= '0' ) && (c <= '9')) ||
-           ((c >= 'A' ) && (c <= 'Z')) ||
-           ((c >= 'a' ) && (c <= 'z'))))
-        return false;
-    return true;
-}
-
-std::string encodeLongName(std::string longName) {
-    for (auto it = longName.begin(); it != longName.end(); ++it) {
-        if (*it == ' ')
-            *it = '-';
-    }
-    return longName;
-}
 
 Flag::Flag(std::string name,
      std::string longName,
@@ -87,12 +52,17 @@ std::string Flag::getUsage() {
     return "[" + shortName + "]";
 }
 
-HyperMap* Flag::process(int argc, char** args, int& index, HyperMap* root) {
-    HyperMap* config = new HyperMap();
-    // ---- TODO ----
+bool Flag::process(int argc, char** args, int& index, HyperMap*& root) {
+    if (index >= argc)
+        throw std::runtime_error("InvalidIndexException");
+    if ((std::strcmp(shortName.c_str(), args[index]) != 0) &&
+        (std::strcmp(longName.c_str(), args[index]) != 0)) {
+        return false;
+    }; ++index;
     // ---- TODO ----
     if (root == nullptr)
-        return config;
-    root->set(name, config);
-    return root;
+        throw std::runtime_error("NullPointerException");
+    root->sets(name, new HyperBool(true));
+    // ---- TODO ----
+    return true;
 }

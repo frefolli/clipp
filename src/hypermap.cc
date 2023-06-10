@@ -1,6 +1,6 @@
 #include <rf/clipp/hypermap.hh>
 #include <stdexcept>
-#include <regex>
+#include <rf/clipp/utils.hh>
 //  class Hypermap
 //      std::map<std::string, HyperObject*> data
 using namespace rf::clipp;
@@ -35,8 +35,9 @@ void HyperMap::sets(std::string name, HyperObject* ptr) {
     data[name] = ptr;
 }
 
-std::string indentString(std::string str) {
-    return std::regex_replace(str, std::regex("\\n"), "\n\t");
+bool HyperMap::has(std::string name) {
+    auto it = data.find(name);
+    return (it != data.end());
 }
 
 std::string HyperMap::toString() {

@@ -22,8 +22,8 @@ namespace rf::clipp {
             std::string getName();
 
             HyperMap* process(int argc, char** args);
-            HyperMap* process(int argc, char** args,
-                              int& index, HyperMap* root);
+            bool process(int argc, char** args,
+                         int& index, HyperMap*& root);
     };
 }
 #endif

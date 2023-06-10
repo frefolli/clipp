@@ -1,6 +1,7 @@
 #ifndef RF_CLIPP_FLAG
 #define RF_CLIPP_FLAG
 #include <string>
+#include <rf/clipp/hypermap.hh>
 namespace rf::clipp {
     class Flag {
         private:
@@ -20,8 +21,8 @@ namespace rf::clipp {
             std::string getShortName();
             std::string getHelp();
             std::string getUsage();
-            HyperMap* process(int argc, char** args,
-                              int& index, HyperMap* root);
+            bool process(int argc, char** args,
+                         int& index, HyperMap*& root);
     };
 }
 #endif
