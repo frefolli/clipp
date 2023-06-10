@@ -75,13 +75,17 @@ std::string Menu::getName() {
     return name;
 }
 
-HyperMap* Menu::process(int argc, char** args,
-                        HyperMap* config) {
-    if (config == nullptr) {
-        config = new HyperMap();
-    }
+HyperMap* Menu::process(int argc, char** args, int& index, HyperMap* root) {
+    HyperMap* config = new HyperMap();
     // ---- TODO ----
-    config->sets("check", new HyperString("OK"));
     // ---- TODO ----
-    return config;
+    if (root == nullptr)
+        return config;
+    root->set(name, config);
+    return root;
+}
+
+HyperMap* Menu::process(int argc, char** args) {
+    int index = 0;
+    return process(argc, args, index, nullptr);
 }

@@ -35,3 +35,13 @@ std::string Arg::getUsage() {
 bool Arg::isOptional() {
     return optional;
 }
+
+HyperMap* Arg::process(int argc, char** args, int& index, HyperMap* root) {
+    HyperMap* config = new HyperMap();
+    // ---- TODO ----
+    // ---- TODO ----
+    if (root == nullptr)
+        return config;
+    root->set(name, config);
+    return root;
+}

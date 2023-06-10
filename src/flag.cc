@@ -86,3 +86,13 @@ std::string Flag::getHelp() {
 std::string Flag::getUsage() {
     return "[" + shortName + "]";
 }
+
+HyperMap* Flag::process(int argc, char** args, int& index, HyperMap* root) {
+    HyperMap* config = new HyperMap();
+    // ---- TODO ----
+    // ---- TODO ----
+    if (root == nullptr)
+        return config;
+    root->set(name, config);
+    return root;
+}

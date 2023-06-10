@@ -36,6 +36,7 @@ Menu* InitMenu() {
 }
 
 HyperMap* ParseArgs(Menu* menu) {
+    /*
     HyperMap* config = new HyperMap {{
         {"screen", new HyperMap {{
             {"width", new HyperInt(600)},
@@ -47,9 +48,10 @@ HyperMap* ParseArgs(Menu* menu) {
         }}},
         {"check", new HyperString("FAIL")}
     }};
+    return config;
+    */
     return menu->process(ACTUAL_ARGC,
-                         ACTUAL_ARGS,
-                         config);
+                         ACTUAL_ARGS);
 }
 
 void PrintUsage(Menu* menu) {
@@ -59,6 +61,17 @@ void PrintUsage(Menu* menu) {
 void PrintConfig(HyperMap* config) {
     std::cout << config->toString() << std::endl;
 }
+
+/* TODO: DEV
+template<class O, class ... I>
+O* alloc(I... args) {
+    if (O* ptr = new O {... args}; ptr != nullptr) {
+        return ptr;
+    } else {
+        throw std::runtime_error("NullPointerException");
+    }
+}
+*/
 
 int main(int argc, char** args) {
     try {

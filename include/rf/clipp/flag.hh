@@ -20,6 +20,8 @@ namespace rf::clipp {
             std::string getShortName();
             std::string getHelp();
             std::string getUsage();
+            HyperMap* process(int argc, char** args,
+                              int& index, HyperMap* root);
     };
 }
 #endif

@@ -17,6 +17,8 @@ namespace rf::clipp {
             std::string getHelp();
             std::string getUsage();
             bool isOptional();
+            HyperMap* process(int argc, char** args,
+                              int& index, HyperMap* root);
     };
 }
 #endif
