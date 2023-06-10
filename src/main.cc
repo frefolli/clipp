@@ -23,16 +23,17 @@ void InitArgs(int argc, char** args) {
 
 Menu* InitMenu() {
     return new Menu { std::string(FILE_NAME), {
-            new Menu("info", {}, { new Flag("verbose", type = Bool) }),
+            new Menu("info", {}, { new Flag("verbose", Bool) }),
             new Menu("pull", {}, { new Flag("verbose") }),
             new Menu("push", {}, { new Flag("verbose") }),
         }, {
-            new Flag("input", type = String),
-            new Flag("output", type = String),
-            new Flag("format", type = String)
+            new Flag("input", String),
+            new Flag("output", String),
+            new Flag("format", String),
+            new Flag("help", Void)
         }, {
-            new Arg("width", false, type = Int),
-            new Arg("height", true, type = Int)
+            new Arg("width", false, Int),
+            new Arg("height", true, Int)
         }
     };
 }
@@ -47,15 +48,17 @@ void PrintUsage(Menu* menu) {
 }
 
 void PrintConfig(HyperMap* config) {
-    std::cout << config->toString() << std::endl;
+    std::cout << "config" << config->toString() << std::endl;
 }
 
 int main(int argc, char** args) {
     try {
         InitArgs(argc, args);
         if (Menu* menu = InitMenu(); menu != nullptr) {
-            PrintUsage(menu);
             if (HyperMap* config = ParseArgs(menu); config != nullptr) {
+                if (config->has("help"))
+                    if (config->get<bool>("help"))
+                        PrintUsage(menu);
                 PrintConfig(config);
                 delete config;
             }

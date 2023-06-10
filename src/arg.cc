@@ -1,6 +1,7 @@
 #include <rf/clipp/arg.hh>
 #include <stdexcept>
 #include <rf/clipp/hyperstring.hh>
+#include <rf/clipp/utils.hh>
 //  class Arg
 //      std::string name
 //      bool optional
@@ -10,8 +11,8 @@ using namespace rf::clipp;
 
 Arg::Arg(std::string name,
          bool optional,
-         std::string help,
-         Type type) {
+         Type type,
+         std::string help) {
     this->name = name;
     this->optional = optional;
     this->help = help;
@@ -50,9 +51,9 @@ bool Arg::process(int argc, char** args, int& index, HyperMap*& root) {
     if (root->has(name))
         return false;
 
-    if (index >= args) {
-        throw std::runtime_error("flag " + name +
-                                 ", expected argument of type" +
+    if (index >= argc) {
+        throw std::runtime_error("argument `" + name +
+                                 "`, expected argument of type " +
                                  toString(type));
     }
     if (HyperObject* obj = parseObject(args[index], type);
@@ -61,8 +62,8 @@ bool Arg::process(int argc, char** args, int& index, HyperMap*& root) {
         ++index;
     } else {
         // TODO: support default value
-        throw std::runtime_error("flag " + name +
-                                 ", expected argument of type" +
+        throw std::runtime_error("argument `" + name +
+                                 "`, expected argument of type " +
                                  toString(type) + ", got \"" +
                                  args[index] + "\"");
     }

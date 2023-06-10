@@ -9,12 +9,12 @@ namespace rf::clipp {
             std::string name;
             bool optional;
             std::string help;
-            Type type = VOID;
+            Type type = Void;
         public:
             Arg(std::string name,
                 bool optional = false,
-                std::string help = "",
-                Type type = VOID);
+                Type type = Void,
+                std::string help = "");
             ~Arg();
 
             std::string getName();

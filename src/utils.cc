@@ -75,9 +75,9 @@ rf::clipp::HyperObject* rf::clipp::parseObject(std::string text,
     if (type == String) {
         return new rf::clipp::HyperString(text);
     } else if (type == Bool) {
-        return new rf::clip::parseBool(text);
+        return rf::clipp::parseBool(text);
     } else if (type == Int) {
-        return new rf::clip::parseInt(text);
+        return rf::clipp::parseInt(text);
     }
     throw std::runtime_error("InvalidTypeException");
 }

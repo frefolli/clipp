@@ -11,10 +11,10 @@
 using namespace rf::clipp;
 
 Flag::Flag(std::string name,
-     std::string longName,
-     std::string shortName,
-     std::string help,
-     Type type) {
+           Type type,
+           std::string longName,
+           std::string shortName,
+           std::string help) {
     if (longName.size() == 0)
         this->longName  = "--" + encodeLongName(name);
     else if (! isLongName(longName))
@@ -67,9 +67,9 @@ bool Flag::process(int argc, char** args, int& index, HyperMap*& root) {
     if (type == Void) {
         root->sets(name, new HyperBool(true));
     } else {
-        if (index >= args) {
-            throw std::runtime_error("flag " + name +
-                                     ", expected argument of type" +
+        if (index >= argc) {
+            throw std::runtime_error("flag `" + name +
+                                     "`, expected argument of type " +
                                      toString(type));
         }
         if (HyperObject* obj = parseObject(args[index], type);
@@ -78,8 +78,8 @@ bool Flag::process(int argc, char** args, int& index, HyperMap*& root) {
             ++index;
         } else {
             // TODO: support default value
-            throw std::runtime_error("flag " + name +
-                                     ", expected argument of type" +
+            throw std::runtime_error("flag `" + name +
+                                     "`, expected argument of type " +
                                      toString(type) + ", got \"" +
                                      args[index] + "\"");
         }

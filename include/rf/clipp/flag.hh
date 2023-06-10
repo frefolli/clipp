@@ -2,6 +2,7 @@
 #define RF_CLIPP_FLAG
 #include <string>
 #include <rf/clipp/hypermap.hh>
+#include <rf/clipp/type.hh>
 namespace rf::clipp {
     class Flag {
         private:
@@ -9,13 +10,13 @@ namespace rf::clipp {
             std::string longName;
             std::string shortName;
             std::string help;
-            Type type = VOID;
+            Type type = Void;
         public:
             Flag(std::string name,
+                 Type type = Void,
                  std::string longName = "",
                  std::string shortName = "",
-                 std::string help = "",
-                 Type type = VOID);
+                 std::string help = "");
             ~Flag();
 
             std::string getName();
